@@ -14,8 +14,13 @@ public class SQLUtil {
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	
 	//private static final String JDBC_URL = "jdbc:mysql://localhost:3306/gecspring";
-	private static final String JDBC_URL = "jdbc:mysql://google/gce?cloudSqlInstance=gecjava1:gecjava1:us-central1:a3=com.google.cloud.sql.mysql.SocketFactory";
-	
+	//private static final String JDBC_URL = "jdbc:mysql://google/gce?cloudSqlInstance=gecjava1:gecjava1:us-central1:a3=com.google.cloud.sql.mysql.SocketFactory";
+	private static String JDBC_URL = String.format(
+		    "jdbc:mysql://google/%s?cloudSqlInstance=%s&"
+		        + "socketFactory=com.google.cloud.sql.mysql.SocketFactory",
+		    "gce",
+		    "gecjava1:us-central1:a3");
+
 	private static final String USER = "root";
 	
 	private static final String PASSWORD = "test1234";
