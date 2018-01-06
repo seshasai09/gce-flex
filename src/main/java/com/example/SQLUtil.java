@@ -20,7 +20,7 @@ public class SQLUtil {
 //		        + "socketFactory=com.google.cloud.sql.mysql.SocketFactory",
 //		    "gce",
 //		    "gecjava1:us-central1:a3");
-	private static final String JDBC_URL = "jdbc:google:mysql://$gecjava1:us-central1:a3/$gce";
+	private static final String JDBC_URL = "jdbc:google:mysql://gecjava1:us-central1:a3/gce";
 
 	private static final String USER = "root";
 	
