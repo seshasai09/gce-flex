@@ -4,15 +4,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 @Path("/service")
@@ -54,7 +49,6 @@ public class Service {
 	@GET
 	public Response getUserData(@QueryParam("skierId") String skierId, @QueryParam("dayNumber") Integer dayNumber){
 		UserVertical vert = new UserVertical();
-		System.out.println(skierId+String.valueOf(dayNumber));
 		vert.setSkierId(skierId);
 		vert.setDayNumber(dayNumber);
 		if(vert.getSkierId()==null)
