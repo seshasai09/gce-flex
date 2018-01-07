@@ -22,6 +22,7 @@ public class SQLUtil {
 //		    "gecjava1:us-central1:a3");
 	private static final String JDBC_URL = "jdbc:google:mysql://gecjava1:us-central1:a3/gce";
 
+	//private static final String USER = "test123";
 	private static final String USER = "root";
 	
 	private static final String PASSWORD = "test1234";

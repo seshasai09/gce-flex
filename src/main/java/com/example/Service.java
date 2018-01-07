@@ -1,47 +1,29 @@
 package com.example;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+@Path("/service")
+public class Service {
 
-@WebServlet(
-	    name = "Service",
-	    urlPatterns = {"/alive"}
-	)
-public class Service extends HttpServlet{
-
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		resp.setContentType("text/plain");
-		resp.getWriter().print("Service is Alive");
+	@Path("/alive")
+	@GET
+	public Response alive(){
+		
+		return Response.status(200).entity("Service is Alive").build();
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		BufferedReader input = req.getReader();
-		System.out.println(input);
-		StringBuilder sb = new StringBuilder();
-		String line= null;
-		while((line=input.readLine())!=null)
-			sb.append(line+"\n");
+	@Path("/alive")
+	@POST
+	public Response postAlive(String req){
 		ServiceDao sdao = new ServiceDao();
-		if(sdao.addReqBody(sb.toString().toString()))
-			resp.getWriter().print("Service is Alive. This is post servie. your input is added");
+		if(sdao.addReqBody(req))
+			return Response.status(200).entity("Service is Alive. This is post servie. your input is added").build();
 		else
-			resp.getWriter().print("Service is Alive. This is post servie. your input was not added");
+			return Response.status(200).entity("Service is Alive. This is post servie. your input was not added").build();
+		
 	}
 	
 	
