@@ -39,36 +39,42 @@ public class ServiceDao {
 		return false;
 	}
 	
-	public boolean addRide(Ride ride){
+	public Wrapper<Boolean,Ride> addRide(Wrapper<Boolean,Ride> wrapper){
 		String insertSql = "insert into rides (resortId,daynumber,timestamp,skierid,liftid) values(?,?,?,?,?)";
 		try {
 			Connection conn = ds.getConnection();
 			PreparedStatement ps = conn.prepareStatement(insertSql);
-			ps.setString(1 ,ride.getResortId());
-			ps.setObject(2,ride.getDayNumber());
-			ps.setObject(3,ride.getTimeStamp());
-			ps.setObject(4,ride.getSkierId());
-			ps.setObject(5,ride.getLiftId());
-			System.out.println("insersting data");
-			return !ps.execute();
+			ps.setString(1 ,wrapper.getRequest().getResortId());
+			ps.setObject(2,wrapper.getRequest().getDayNumber());
+			ps.setObject(3,wrapper.getRequest().getTimeStamp());
+			ps.setObject(4,wrapper.getRequest().getSkierId());
+			ps.setObject(5,wrapper.getRequest().getLiftId());
+			System.out.println("insersting data: "+ps.toString());
+			long start = System.nanoTime();
+			wrapper.setBody( !ps.execute());
+			wrapper.setDbTime(System.nanoTime()-start);
+			wrapper.setError(false);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			wrapper.setError(true);
 		}
-		return false;
+		return wrapper;
 	}
 	
-	public JSONObject getUserData(UserVertical vertical) {
+	public Wrapper<JSONObject, UserVertical> getUserData(Wrapper<JSONObject, UserVertical> wrapper) {
 		String selectSql = "select liftid from rides where skierid=? and daynumber=?";
 		JSONObject json = null;
 		try {
 			Connection conn = ds.getConnection();
 			PreparedStatement   ps = conn.prepareStatement(selectSql);
-			ps.setString(1, vertical.getSkierId());
-			ps.setString(2, vertical.getDayNumber().toString());
+			ps.setString(1, wrapper.getRequest().getSkierId());
+			ps.setString(2, wrapper.getRequest().getDayNumber().toString());
 				
 			System.out.println("fetching data+ "+ps.toString());
+			long start = System.nanoTime();
 			ResultSet rs =ps.executeQuery();
+			wrapper.setDbTime(System.nanoTime()-start);
 			json = new JSONObject();
 			int ver=0,lif=0;
 			while(rs.next()){
@@ -85,15 +91,38 @@ public class ServiceDao {
 			}
 			json.put("Total vertical meters", ver);
 			json.put("Lifts count is", lif);
-			return json;
+			wrapper.setBody(json);
+			wrapper.setError(false);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			wrapper.setError(true);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			wrapper.setError(true);
 		}
-		return json;
+		return wrapper;
+	}
+	
+	public void addMetrics(Wrapper wrapper){
+		
+		String insertSql = "insert into matrices (requesttime,dbtime,numberoferrors) values(?,?,?)";
+		
+		try {
+			Connection conn = ds.getConnection();
+			PreparedStatement ps = conn.prepareStatement(insertSql);
+			ps.setObject (1 ,(double)wrapper.getReqTime()/(1e9));
+			ps.setObject(2,(double)wrapper.getDbTime()/(1e9));
+			ps.setObject(3,wrapper.isError());
+			ps.execute();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			wrapper.setError(true);
+		}
+		
 	}
 
 }

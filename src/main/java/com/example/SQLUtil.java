@@ -13,15 +13,15 @@ public class SQLUtil {
 	
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	
-	//private static final String JDBC_URL = "jdbc:mysql://localhost:3306/gecspring";
+	private static final String JDBC_URL = "jdbc:mysql://localhost:3306/gecspring";
 	//private static final String JDBC_URL = "jdbc:mysql://google/gce?cloudSqlInstance=gecjava1:gecjava1:us-central1:a3=com.google.cloud.sql.mysql.SocketFactory";
 	//gce mysql url
-	private static final String JDBC_URL = "jdbc:google:mysql://gecjava1:us-central1:a3/gce";
+//	private static final String JDBC_URL = "jdbc:google:mysql://gecjava1:us-central1:a3/gce";
 
 	//localhost user
-//	private static final String USER = "test123";
+	private static final String USER = "test123";
 	//gec mysql user
-	private static final String USER = "root";
+//	private static final String USER = "root";
 	
 	private static final String PASSWORD = "test1234";
 	
@@ -51,7 +51,7 @@ public class SQLUtil {
 		
 		Class.forName(JDBC_DRIVER);
 		gPool = new GenericObjectPool();
-		gPool.setMaxActive(5);
+		gPool.setMaxActive(200);
 
 		ConnectionFactory cf = new DriverManagerConnectionFactory(JDBC_URL, USER, PASSWORD);
 		PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, gPool, null, null, false, true);
